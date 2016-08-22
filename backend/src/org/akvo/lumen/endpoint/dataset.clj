@@ -20,13 +20,19 @@
                        (for [c (sort-by f (filter f columns))]
                          (str (get c "columnName") " " (get c "direction"))))
                       "rnum")
-        order-by-expr (str/join "," sort-columns)
-        sql (format "SELECT %s FROM %s ORDER BY %s"
+        order-by-expr (str "ORDER BY " (str/join "," sort-columns))
+        limit-expr (if limit
+                     (str "LIMIT " (Integer/parseInt limit))
+                     "")
+        offset-expr (if offset
+                      (str "OFFSET " (Integer/parseInt offset))
+                      "")
+        sql (format "SELECT %s FROM %s %s %s %s"
                     (str/join "," column-names)
                     table-name
-                    order-by-expr)
-        sql (if limit (str sql " LIMIT " (Integer/parseInt limit)) sql)
-        sql (if offset (str sql " OFFSET " (Integer/parseInt offset)) sql)]
+                    order-by-expr
+                    limit-expr
+                    offset-expr)]
     sql))
 
 (defn find-dataset [conn id {:keys [limit offset]}]
@@ -57,7 +63,6 @@
 
       (context "/:id" [id]
         (GET "/" _
-          (println params)
           (if-let [dataset (find-dataset tenant-conn id params)]
             (response dataset)
             (not-found {:id id})))
