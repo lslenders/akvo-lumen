@@ -12,7 +12,7 @@
 (hugsql/def-db-fns "org/akvo/lumen/endpoint/dataset.sql")
 (hugsql/def-db-fns "org/akvo/lumen/job-execution.sql")
 
-(defn select-data-sql [table-name columns]
+(defn select-data-sql [table-name columns limit offset]
   (let [column-names (map #(get % "columnName") columns)
         f (fn [m] (get m "sort"))
         sort-columns (conj
@@ -24,14 +24,16 @@
         sql (format "SELECT %s FROM %s ORDER BY %s"
                     (str/join "," column-names)
                     table-name
-                    order-by-expr)]
+                    order-by-expr)
+        sql (if limit (str sql " LIMIT " (Integer/parseInt limit)) sql)
+        sql (if offset (str sql " OFFSET " (Integer/parseInt offset)) sql)]
     sql))
 
-(defn find-dataset [conn id]
+(defn find-dataset [conn id {:keys [limit offset]}]
   (when-let [dataset (dataset-by-id conn {:id id})]
     (let [columns (remove #(get % "hidden") (:columns dataset))
           data (rest (jdbc/query conn
-                                 [(select-data-sql (:table-name dataset) columns)]
+                                 [(select-data-sql (:table-name dataset) columns limit offset)]
                                  {:as-arrays? true}))]
       {:id id
        :name (:title dataset)
@@ -55,7 +57,8 @@
 
       (context "/:id" [id]
         (GET "/" _
-          (if-let [dataset (find-dataset tenant-conn id)]
+          (println params)
+          (if-let [dataset (find-dataset tenant-conn id params)]
             (response dataset)
             (not-found {:id id})))
 
