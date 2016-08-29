@@ -6,7 +6,7 @@ jdk:
 cache:
   directories:
   - $HOME/.m2
-  - client/node_modules
+  - frontend/node_modules
 sudo: required
 addons:
   postgresql: '9.5'
@@ -16,7 +16,7 @@ before_install:
 - cd keycloak
 - ./server.sh build && ./server.sh run
 - cd ..
-- cd client
+- cd frontend
 - nvm install 4
 - npm config set spin false
 - npm install
@@ -27,7 +27,7 @@ before_install:
 - echo '{:user {:plugins [[jonase/eastwood "0.2.3"]]}}' > $HOME/.lein/profiles.clj
 script:
 - lein do clean, check, test :all, eastwood '{:source-paths ["src" "test"]}'
-- cd ../client
+- cd ../frontend
 - npm run lint
 - npm test
 notifications:

@@ -1,14 +1,22 @@
-/target
-/classes
-/checkouts
+# https://github.com/github/gitignore/blob/master/Leiningen.gitignore
 pom.xml
 pom.xml.asc
 *.jar
 *.class
-/.lein-*
-/.nrepl-port
+/lib/
+/classes/
+/target/
+/checkouts/
+.lein-deps-sum
+.lein-repl-history
+.lein-plugins/
+.lein-failures
+.nrepl-port
+
+# https://github.com/duct-framework/duct/blob/master/lein-template/resources/leiningen/new/duct/base/gitignore
 /.dir-locals.el
 /profiles.clj
 /dev/resources/local.edn
-/dev/src/local.clj
+
+# Local
 /doc
