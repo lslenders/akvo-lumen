@@ -8,8 +8,8 @@ An open-source, easy to use data mashup, analysis and publishing platform.
 - [Issues](https://github.com/akvo/akvo-lumen/issues)
 - [Board](http://waffle.io/akvo/akvo-lumen)
 
-## Client
-[Readme](client/README.md)
+## Frontend
+[Readme](frontend/README.md)
 
 ## Backend
 [Readme](backend/README.md)
