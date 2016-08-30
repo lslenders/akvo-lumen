@@ -9,11 +9,8 @@
              [repl :as repl]]
             [reloaded.repl :refer [go stop]]))
 
-#_(def config
-  {:db {:uri "jdbc:postgresql://localhost/lumen?user=lumen&password=password"}})
-
 (def test-tenant-spec
-  (->> "seed.edn" io/resource slurp edn/read-string
+  (->> "tenants.edn" io/resource slurp edn/read-string
        :tenant-manager :tenants
        first))
 

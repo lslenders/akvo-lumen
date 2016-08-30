@@ -4,6 +4,7 @@
             [clojure.test :refer :all]
             [hugsql.core :as hugsql]
             [org.akvo.lumen.main]
+            [org.akvo.lumen.fixtures :as fixtures]
             [org.akvo.lumen.migrate :as migrate]
             [org.akvo.lumen.transformation.engine :refer :all]
             [reloaded.repl :refer [stop go]]))
@@ -12,9 +13,7 @@
 
 (def columns (vec (take 3 (json/parse-string (slurp (io/resource "columns_test.json"))))))
 
-(def tenant-conn {:connection-uri "jdbc:postgresql://localhost/test_lumen_tenant_1?user=lumen&password=password"})
-
-
+(def tenant-conn fixtures/test-conn)
 
 (defn tf-engine-fixture
   [f]
